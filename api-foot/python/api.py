@@ -29,7 +29,7 @@ def get_new_token():
     print(response.headers)
     return response.headers['Set-Cookie']
 
-print(get_new_token())
+# print(get_new_token())
 
 def get_common_transport(km_bus = "", km_coach = "", km_rail = "", km_int_rail = "", km_tram = "", km_sub = "", km_taxi = ""):
     url = "https://calculator.carbonfootprint.com/calculator.aspx?c=Full&tab=6&h=7ed100813a406a753c01546db353190e"
@@ -93,11 +93,11 @@ def get_type_conso(type):
     }
     return switch.get(type, 0)
 
-print(get_common_transport(km_bus = 300, km_coach=300))
+# print(get_common_transport(km_bus = 300, km_coach=300))
 
-print("\n\n")
+# print("\n\n")
 
-def get_car_transport(km, conso=5, type_conso = 0):
+def get_car_transport2(km, conso=5, type_conso = 0):
 
     url = "https://calculator.carbonfootprint.com/calculator.aspx?c=Full&tab=4&h=7ed100813a406a753c01546db353190e"
 
@@ -181,7 +181,10 @@ def get_car_transport(km=0, hours=0, type_v=1):
 
 
 
-print(get_car_transport(km = 500, type_v=2))
+# print(get_car_transport(km = 500, type_v=2))
+
+# print(get_car_transport2(500, conso=10, type_conso=1))
+
 
 # diesel = 10 ; 2.55784
 # essence = 10 ; 2.16185
