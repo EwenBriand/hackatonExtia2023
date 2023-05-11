@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+    "name": "MAP",
+    "description": "MAP",
+    "version": "1.0",
+    "browser_action": {
+        "default_icon": "icon.png"
+    },
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "permissions": [
+      "cookies",
+      "tabs",
+      "downloads"
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval' ; object-src 'self'; "
+}
+
