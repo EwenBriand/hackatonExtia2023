@@ -176,6 +176,7 @@ def get_car_transport(km=0, hours=0, type_v=1):
     print(response.json())
 
     # soup = BeautifulSoup(response.text, "html.parser")
+    print(response.json())
     return float(response.json()["emission"]) * 1000 * 1000
 
 

@@ -3,7 +3,9 @@
   "permissions": [
     "scripting",
     "activeTab",
-    "geolocation"
+    "geolocation",
+    "webNavigation",
+    "tabs"
 
   ],
     "name": "MAP",
