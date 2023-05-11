@@ -142,7 +142,7 @@ def get_car_transport2(km, conso=5, type_conso = 0):
     if co2 != None:
         co2 = co2.split("=")[1].split(" ")[1]
     print(co2)
-    return float(co2) / 100
+    return float(co2) / 100 * 1000 * 1000
 
 
 def get_car_transport(km=0, hours=0, type_v=1):
@@ -176,7 +176,7 @@ def get_car_transport(km=0, hours=0, type_v=1):
     print(response.json())
 
     # soup = BeautifulSoup(response.text, "html.parser")
-    return response.json()["emission"]
+    return float(response.json()["emission"]) * 1000 * 1000
 
 
 

@@ -11,7 +11,7 @@ chrome.action.onClicked.addListener(function() {
             }
         });
 });
-  function injectDiv() {
+  async function injectDiv() {
     var div = document.querySelector("#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.m6QErb");
     var divEnfants = div.getElementsByClassName("MespJc");
     for (var i = 0; i < divEnfants.length; i++) {
@@ -37,10 +37,11 @@ chrome.action.onClicked.addListener(function() {
                 console.log("-----------------")
 
                 var p1 = document.createElement('p');
-                p1.innerHTML = 'Carbon footprint : ' + rand + 'g CO2';
-                if (rand < 1000)
+                var value = await getFootprint(type, time, dist);
+                p1.innerHTML = 'Carbon footprint : ' + value + 'g CO2';
+                if (value < 1000)
                     p1.style.color = 'green';
-                else if (rand < 1500)
+                else if (value < 1500)
                     p1.style.color = 'orange';
                 else
                     p1.style.color = 'red';
@@ -76,4 +77,89 @@ chrome.action.onClicked.addListener(function() {
         else
             return 'unknown';
     }
+
+  function getFootprint(vehiculeType, travelTime, distance) {
+    var knownTypes = ["car", "transit", "bike", "walk", "plane"]
+    console.log("le type est: " + vehiculeType + "dans get footprint");
+    if (!knownTypes.includes(vehiculeType)) {
+        console.log("Error: vehiculeType must be car, transit, bike or foot");
+        return "Error";
+    }
+    return askForFootPrint(vehiculeType, travelTime, distance);
   }
+
+
+  function askForFootPrint(vehiculeType, travelTime, distance) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      console.log("le type est: " + vehiculeType)
+      callbacks = {
+          "car": ()=>{
+              return askFootPrintInCar(distance)
+          },
+          "transit": ()=>{
+              return askForFootPrintInTransit(travelTime) // here the distance parameter represents the time spent in subway
+          },
+          "bike": ()=>{
+              return askForFootPrintInTransit(distance)
+          },
+          "walk": ()=>{return 0}
+      }
+
+      return callbacks[vehiculeType]();
+  }
+
+
+  async function askFootPrintInCar(distance) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+      "km": distance.toString(),
+      "type_v": 2
+      });
+
+      var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+      };
+
+      var res = await fetch("http://127.0.0.1:5000/get_CarBone", requestOptions)
+      .then(response => response.text())
+      .then(result => {return result})
+      .catch(error => console.log('error', error));
+      console.log("ewen " + res);
+      return parseInt(res);
+  }
+
+  function askForFootPrintInTransit(distance) {
+      // src for the numbers: http://interconnect.one/news-press/news/141-the-concept-of-public-transport-and-its-quality
+      var raw = JSON.stringify({
+          "km_bus": (distance / 55.7).toString(),
+          "type_v": "",
+          "km_coach": "",
+          "km_rail": "",
+          "km_int_rail": (distance / 13.60).toString(),
+          "km_tram": (distance / 14.50).toString(),
+          "km_sub": (distance / 16.2).toString(),
+          "km_taxi": ""
+      });
+
+      var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+      };
+
+      var res = undefined;
+      fetch("http://127.0.0.1:5000/get_commonT_foot", requestOptions)
+      .then(response => response.text())
+      .then(result => res = result)
+      .catch(error => console.log('error', error));
+      console.log("die kindern " + res);
+      return parseInt(res);
+  }
+}
