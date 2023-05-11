@@ -24,17 +24,20 @@ document.addEventListener('DOMContentLoaded', function() {
         var divEnfant = divEnfants[i];
         for (var j = 0; j < divEnfant.children.length; j++) {
             var divEnfantEnfant = divEnfant.children[j];
-            if (divEnfantEnfant.getElementsByClassName('XdKEzd')[0] != undefined) {
+            if (divEnfantEnfant.children.length != 0) {
                 var type = getType(div.children[0].querySelectorAll('img')[0]);
                 console.log(type);
                 console.log("-----------------")
                 var dist = 0;
-                if (type != 'transport')
+                if (type != 'transport' && type != 'plane')
                     dist = getDistance(divEnfantEnfant.getElementsByClassName('XdKEzd')[0]);
                 console.log(dist);
                 console.log("-----------------")
-
-                var time = getTime(divEnfantEnfant.getElementsByClassName('XdKEzd')[0]);
+                var time = 0;
+                if (type == 'plane')
+                    time = getTime(divEnfantEnfant.getElementsByClassName('uchGue')[0]);
+                else
+                    time = getTime(divEnfantEnfant.getElementsByClassName('XdKEzd')[0]);
                 console.log(time);
                 console.log("-----------------")
 
@@ -64,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getTime(div) {
         console.log(div);
+        if (div.children.length == 0)
+            return div.innerText;
         return div.children[0].innerText;
     }
 
