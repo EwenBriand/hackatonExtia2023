@@ -1,5 +1,5 @@
 from flask import Flask, request, send_file, render_template
-import python as back
+import src as back
 from flask_cors import CORS
 import sys
 import asyncio
